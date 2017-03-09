@@ -1,0 +1,10 @@
+library(dplyr)
+library(lubridate)
+path <- "./household_power_consumption.txt"
+epc <- read.table(path, header = TRUE, sep = ";")
+epc_2days <- filter(epc, paste(epc$Date) %in% c("1/2/2007", "2/2/2007"))
+x <- dmy_hms(paste(epc_2days$Date, epc_2days$Time))
+gap <- paste(epc_2days$Global_active_power)
+plot(x, gap, xlab = "", ylab = "Global Active Power (kilowatts)", col = "white")
+lines(x[order(x)], gap[order(x)], xlim=range(x), ylim=range(gap))
+dev.copy(png, file = "plot2.png")
